@@ -371,7 +371,7 @@
      * 'Hello world!'.repeat('3') -> Hello world!Hello world!Hello world!
      * 'Hello world!'.repeat('blah') -> Hello world!
      */
-    sp.repeat = function (n) {
+    sp.repeat = function (rep) {
         if(!rep || isNaN(rep)) return this;
         for(var i = 0, res = '', str = this + separator; i < rep; i++) res += str;
         return res.slice(0,-separator.length);
