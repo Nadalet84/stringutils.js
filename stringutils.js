@@ -91,7 +91,8 @@
      */
     sp.containsIgnoreCase = function (str) {
 		str = String(str);
-        return str != null && str.length <= this.length ? this.toLowerCase().indexOf(str.toLowerCase()) != -1 : false;
+        return str != null && str.length <= this.length 
+        ? this.toLowerCase().indexOf(str.toLowerCase()) != -1 : false;
     };
     
     
@@ -185,7 +186,8 @@
      * '3.14159265358979323846264338327'.truncate(5) -> 3.141...
      */
     sp.truncate = function (maxWidth, str) {
-        return this.length > maxWidth && maxWidth > 0 ? this.substring(0, maxWidth) + (str || '...') : this;
+        return this.length > maxWidth && maxWidth > 0 
+        ? this.substring(0, maxWidth) + (str || '...') : this;
     };
     
     
@@ -216,7 +218,8 @@
      */
     sp.startsWith = function (str) {
 		str = String(str);
-		return str == null || str.length > this.length ? false : this.substring(0, str.length) == str;
+		return str == null || str.length > this.length 
+		? false : this.substring(0, str.length) == str;
     };
     
     
@@ -228,7 +231,8 @@
      */
     sp.startsWithIgnoreCase = function (str) {
 		str = String(str);
-        return str == null || str.length > this.length ? false : this.substring(0, str.length).equalsIgnoreCase(str);
+        return str == null || str.length > this.length 
+        ? false : this.substring(0, str.length).equalsIgnoreCase(str);
     };
     
     
@@ -240,7 +244,8 @@
      */
     sp.endsWith = function (str) {
 		str = String(str);
-		return str == null || str.length > this.length ? false : this.substring(this.length - str.length, this.length) == str;
+		return str == null || str.length > this.length 
+		? false : this.substring(this.length - str.length, this.length) == str;
     };
     
     
@@ -252,7 +257,8 @@
      */
     sp.endsWithIgnoreCase = function (str) {
 		str = String(str);
-		return str == null || str.length > this.length ? false : this.substring(this.length - str.length, this.length).equalsIgnoreCase(str);
+		return str == null || str.length > this.length 
+		? false : this.substring(this.length - str.length, this.length).equalsIgnoreCase(str);
     };
     
     
@@ -270,7 +276,7 @@
      * 'Hello-world'.reverseWords('-') -> world-Hello
      */
     sp.reverseWords = function (s) {
-		s = s || ' ';
+		s |= ' ';
         return this.split(s).reverse().join(s);
     };
     
@@ -327,7 +333,8 @@
      * '1707.25.09'.toNumber() -> NaN
      */
     sp.toNumber = function (decimals) {
-        return this.isNumeric() ? parseFloat(this).toFixed(decimals || this.countRight('.')) : NaN;
+        return this.isNumeric() 
+        ? parseFloat(this).toFixed(decimals || this.countRight('.')) : NaN;
     };
     
     
@@ -387,64 +394,52 @@
      * '37.779398571318765,-122.442626953125'.distanceKm() -> NaN
      */
     sp.distanceKm = function (lat2, lon2) {
-		var selfCoord = this.split(','),rad = Math.PI/180,lat1 = selfCoord[0] *rad, lon1 = selfCoord[1]*rad;      
+		var selfCoord = this.split(','),rad = Math.PI/180,
+		lat1 = selfCoord[0] *rad, lon1 = selfCoord[1]*rad;      
         lat2 *= rad, lon2 *= rad;
-        var x = (lon2-lon1) * Math.cos((lat1+lat2)/2);
-        var y = (lat2-lat1);
+        var x = (lon2-lon1) * Math.cos((lat1+lat2)/2), y = (lat2-lat1);
         return (Math.sqrt(x*x + y*y) * 6371).toFixed(1);
     };
     
     
-    /**
-     * 'Hello world!'.difference() -> 11
-     * 'Hello world!'.difference('') -> 11
-     * 'Hello world!'.difference('hello') -> 7
-     * 'Hello world!'.difference('Hello') -> 6
-     * 'Hello world!'.difference('hell wrld') -> 3
-     */
-    sp.difference = function(str2) {
-		if (this == null && str2 == null) return 0;
-		if (this == null) return String(str2).length;
-		if (str2 == null) return this.length;
-		str2 = String(str2);
+    function getDifference(str1, str2) {
 		var current = [], prev, value;
 		for (var i = 0; i <= str2.length; i++)
-			for (var j = 0; j <= this.length; j++) {
+			for (var j = 0; j <= str1.length; j++) {
 				if (i && j)
-					value = this.charAt(j - 1) === str2.charAt(i - 1) ? prev : Math.min(current[j], current[j - 1], prev) + 1;            
+					value = str1.charAt(j - 1) === str2.charAt(i - 1) 
+					? prev : Math.min(current[j], current[j - 1], prev) + 1;            
 				else
 					value = i + j;
 				prev = current[j];
 				current[j] = value;
 			}
 		return current.pop();
+	}
+    
+    
+    /**
+     * 'Hello world'.difference() -> 11
+     * 'Hello world'.difference('') -> 11
+     * 'Hello world'.difference('hello') -> 7
+     * 'Hello world'.difference('Hello') -> 6
+     * 'Hello world'.difference('hell wrld') -> 3
+     */
+    sp.difference = function(str2) {
+		return !str2 ? this.length : getDifference(this, String(str2));
     };
     
     
     /**
-     * 'Hello world!'.differenceIgnoreCase() -> 11
-     * 'Hello world!'.differenceIgnoreCase('') -> 11
-     * 'Hello world!'.differenceIgnoreCase('hello') -> 6
-     * 'Hello world!'.differenceIgnoreCase('Hello') -> 6
-     * 'Hello world!'.differenceIgnoreCase('heLL wrlD') -> 2
+     * 'Hello world'.differenceIgnoreCase() -> 11
+     * 'Hello world'.differenceIgnoreCase('') -> 11
+     * 'Hello world'.differenceIgnoreCase('hello') -> 6
+     * 'Hello world'.differenceIgnoreCase('Hello') -> 6
+     * 'Hello world'.differenceIgnoreCase('heLL wrlD') -> 2
      */
     sp.differenceIgnoreCase = function(str2) {
-		if (this == null && str2 == null) return 0;
-		if (this == null) return String(str2).length;
-		if (str2 == null) return this.length;
-		str2 = String(str2).toLowerCase();
-        var self = this.toLowerCase();
-		var current = [], prev, value;
-		for (var i = 0; i <= str2.length; i++)
-			for (var j = 0; j <= self.length; j++) {
-				if (i && j)
-					value = self.charAt(j - 1) === str2.charAt(i - 1) ? prev : Math.min(current[j], current[j - 1], prev) + 1;            
-				else
-					value = i + j;
-				prev = current[j];
-				current[j] = value;
-			}
-		return current.pop();
+		return !str2 ? this.length 
+		: getDifference(this.toLowerCase(), String(str2).toLowerCase());
     };
 
     
