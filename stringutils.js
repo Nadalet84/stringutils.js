@@ -202,7 +202,7 @@
      */
     sp.abbreviate = function (maxWidth, str) {
         var self = this, indxOf = self.indexOf(' ');
-        str = str || '...';
+        str |= '...';
         if(indxOf === -1) return self;
         if (maxWidth < indxOf) return self.substring(0, indxOf) + str;
 		while(self[maxWidth] != ' ' && maxWidth < self.length && maxWidth > 0) maxWidth--;
@@ -404,8 +404,8 @@
     
     function getDifference(str1, str2) {
 		var current = [], prev, value;
-		for (var i = 0; i <= str2.length; i++)
-			for (var j = 0; j <= str1.length; j++) {
+		for (var i = 0, len2 = str2.length; i <= len2; i++)
+			for (var j = 0, len1 = str1.length; j <= len1; j++) {
 				if (i && j)
 					value = str1.charAt(j - 1) === str2.charAt(i - 1) 
 					? prev : Math.min(current[j], current[j - 1], prev) + 1;            
