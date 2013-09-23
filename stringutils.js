@@ -202,7 +202,7 @@
      */
     sp.abbreviate = function (maxWidth, str) {
         var self = this, indxOf = self.indexOf(' ');
-        str |= '...';
+        str = str || '...';
         if(indxOf === -1) return self;
         if (maxWidth < indxOf) return self.substring(0, indxOf) + str;
 		while(self[maxWidth] != ' ' && maxWidth < self.length && maxWidth > 0) maxWidth--;
@@ -276,7 +276,7 @@
      * 'Hello-world'.reverseWords('-') -> world-Hello
      */
     sp.reverseWords = function (s) {
-		s |= ' ';
+		s = s || ' ';
         return this.split(s).reverse().join(s);
     };
     
@@ -383,8 +383,8 @@
      */
     sp.repeat = function (rep, separator) {
         if(!rep || isNaN(rep)) return this;
-        for(var i = 0, res = '', str = this + separator; i < rep; i++) res += str;
-        return res.slice(0, -separator.length);
+        for(var i = 0, res = '', str = this+(separator || ''); i < rep; i++) res += str;
+        return separator ? res.slice(0, -separator.length) : res;
     };
     
     
